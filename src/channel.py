@@ -27,9 +27,15 @@ class Channel:
 
     @classmethod
     def get_service(cls):
+        """
+        класс-метод возвращает объект для работы с YouTube API
+        """
         return build('youtube', 'v3', developerKey=cls.api_key)
 
     def to_json(self, file):
+        """
+        Сохраняет в файл значения атрибутов
+        """
         dict_channel = {
             'id': self.channel_id,
             'title': self.title,
@@ -42,3 +48,51 @@ class Channel:
         with open(file, 'w', encoding='utf-8') as file:
             json.dump(dict_channel, file, ensure_ascii=False)
 
+    def __str__(self):
+        """
+        Возвращает название и ссылку на канал по шаблону <название_канала> (<ссылка_на_канал>)
+        """
+        return f"{self.title} ({self.url})"
+
+    def __add__(self, other):
+        """
+        Реалузет возможность складывать два канала между собой.
+        """
+        return int(self.subscriber_count) + int(other.subscriber_count)
+
+
+    def __sub__(self, other):
+        """
+        Реалузует возможность вычитать два канала между собой.
+        """
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+    # def __gt__(self, other):
+    #     """
+    #     Реалузует возможность сравнивать два канала между собой ("больше").
+    #     """
+    #     return self.subscriber_count > other.subscriber_count
+    #
+    # def __ge__(self, other):
+    #     """
+    #     Реалузует возможность  сравнивать два канала между собой ("больше или равно").
+    #     """
+    #     return self.subscriber_count >= other.subscriber_count
+
+    def __lt__(self, other):
+        """
+        Реалузует возможность сравнивать два канала между собой ("меньше").
+        """
+        return self.subscriber_count > other.subscriber_count
+
+    def __le__(self, other):
+        """
+        Реалузует возможность  сравнивать два канала между собой ("меньше или равно").
+        """
+        return self.subscriber_count >= other.subscriber_count
+
+    def __eq__(self, other):
+        """
+        Реалузует возможность  сравнивать два канала между собой("равно").
+        """
+        return self.subscriber_count == other.subscriber_count
